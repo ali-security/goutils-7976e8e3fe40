@@ -1,10 +1,18 @@
 language: go
 
 go:
-  - 1.6
-  - 1.7
-  - 1.8
-  - tip
+  - 1.6.4
+  - 1.7.6
+  - 1.8.7
+  - 1.11.x
+
+# This Travis image clones outside GOPATH and ignores go_import_path, so the
+# GOPATH-era Go legs (1.6-1.8) cannot resolve the package; place it there first.
+install:
+  - mkdir -p $GOPATH/src/github.com/Masterminds
+  - cp -a $TRAVIS_BUILD_DIR $GOPATH/src/github.com/Masterminds/goutils
+  - cd $GOPATH/src/github.com/Masterminds/goutils
+  - go get -v -t ./...
 
 script:
   - go test -v
